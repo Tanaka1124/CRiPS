@@ -45,6 +45,7 @@ public class PPSourceMetricsPane extends JPanel {
 				return unit.getFile(time);
 			}
 		}, timeModel);
+		
 		split.setLeftComponent(sourcePane);
 
 		PPUtilitiesPane utilitiesPane = new PPUtilitiesPane(timeModel, unit);
