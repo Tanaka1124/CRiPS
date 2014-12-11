@@ -19,6 +19,7 @@ public class SAutoSSTaker implements WorkspaceListener {
 	String saveDirName = "BlockPrint";
 	
 	public void workspaceEventOccurred(WorkspaceEvent event) {
+		System.out.println(event.getEventType());
 		if (event.getEventType() == 5 || event.getEventType() == 6) { //BLOCKS_CONNECTED || BLOCKS_DISCONNECTED
 			javaFilePath = new File(Workspace.getInstance()
 					.getWorkSpaceController().getSelectedJavaFile());

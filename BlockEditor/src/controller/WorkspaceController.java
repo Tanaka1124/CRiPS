@@ -58,6 +58,8 @@ import workspace.WorkspaceEvent;
 import workspace.WorkspaceListener;
 import a.slab.blockeditor.SBlockEditor;
 import a.slab.blockeditor.SBlockEditorListener;
+import a.slab.blockeditor.extent.SAutoSSTaker;
+import a.slab.blockeditor.extent.SAutoXMLSaver;
 import bc.apps.BlockToJavaMain;
 import bc.apps.JavaToBlockMain;
 import clib.common.filesystem.CFilename;
@@ -291,6 +293,8 @@ public class WorkspaceController {
 		BlockLinkChecker.addRule(new InfixRule());
 		// arranged by sakai lab 2011/11/21
 		// BlockLinkChecker.addRule(new CallMethodRule());
+		workspace.addWorkspaceListener(new SAutoSSTaker());
+		workspace.addWorkspaceListener(new SAutoXMLSaver());;
 
 		// set the dirty flag for the language definition file
 		// to false now that the lang file has been loaded
