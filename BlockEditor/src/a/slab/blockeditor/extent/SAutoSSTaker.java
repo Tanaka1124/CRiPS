@@ -17,16 +17,16 @@ public class SAutoSSTaker implements WorkspaceListener {
 	File saveDir;
 	long pictureName;
 	String saveDirName = "BlockPrint";
-	
+
 	public void workspaceEventOccurred(WorkspaceEvent event) {
-		System.out.println(event.getEventType());
+		//		System.out.println(event.getEventType());
 		if (event.getEventType() == 5 || event.getEventType() == 6) { //BLOCKS_CONNECTED || BLOCKS_DISCONNECTED
 			javaFilePath = new File(Workspace.getInstance()
 					.getWorkSpaceController().getSelectedJavaFile());
-			saveDir = new File(
-					new File(javaFilePath.getParent(), ".pres2"), saveDirName);//.pres2->BlockPrint->pictureName.jpg
+			saveDir = new File(new File(javaFilePath.getParent(), ".pres2"),
+					saveDirName);//.pres2->BlockPrint->pictureName.jpg
 
-			if (!saveDir.exists()) {  //無ければ生成
+			if (!saveDir.exists()) { //無ければ生成
 				saveDir.mkdirs();
 			}
 
@@ -36,8 +36,9 @@ public class SAutoSSTaker implements WorkspaceListener {
 					.exists()) {
 				pictureName++;
 			}
-			
-			createSSTaker().takeToFile(new File(saveDir, String.valueOf(pictureName)));
+
+			createSSTaker().takeToFile(
+					new File(saveDir, String.valueOf(pictureName)));
 		}
 	}
 
@@ -60,8 +61,17 @@ public class SAutoSSTaker implements WorkspaceListener {
 			i++;
 		}
 		r.grow(10, 10);// margin
-		r = r.intersection(comp.getBounds());// マイナスにはみ出さない
-
+		r = r.intersection(comp.getBounds());// マイナスにはみ出さない　　//compはスクロールするとマイナスになるためマイナスにはみ出す．つまり実質，機能してない
+		
+		r.setLocation(0, 0);//2014　12/11　たなか　応急処置　ブロックが左上ギリギリに存在するときに画面を右下にスクロールしてSSを撮影するとRectangleのx,yの値がマイナスをとり，例外になるため
+		/*デバッグ用
+		 * 		System.out.println("Rectangle : height= " + r.getHeight() + " width= "
+						+ r.getWidth() + "x= " + r.getX() + " y= "
+						+ r.getY());
+				System.out.println("Canvas : height= " + comp.getHeight() + " width= "
+						+ comp.getWidth() + "x= " + comp.getX() + " y= "
+						+ comp.getY());
+		*/
 		CScreenShotTaker taker = new CScreenShotTaker(comp);
 		taker.setClipbounds(r);
 		return taker;

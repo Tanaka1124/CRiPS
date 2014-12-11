@@ -14,7 +14,8 @@ import a.slab.blockeditor.SBlockEditor;
 
 public class SAutoXMLSaver implements WorkspaceListener {
 	public void workspaceEventOccurred(WorkspaceEvent event) {
-		if (event.getEventType() == 5||event.getEventType() == 6) {  //BLOCKS_CONNECTED || BLOCKS_DISCONNECTED
+		if (event.getEventType() == 5 || event.getEventType() == 6) { //BLOCKS_CONNECTED || BLOCKS_DISCONNECTED
+		//		if (event.getEventType() == 5) {
 			try {
 				logging2Xml();
 			} catch (Exception ex) {
@@ -41,7 +42,7 @@ public class SAutoXMLSaver implements WorkspaceListener {
 		if (!xmlLogFilePath.exists()) {//無ければ生成
 			xmlLogFilePath.mkdirs();
 		}
-		
+
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(String.valueOf(new File(xmlLogFilePath,
 						String.valueOf(System.currentTimeMillis() + ".xml")))),

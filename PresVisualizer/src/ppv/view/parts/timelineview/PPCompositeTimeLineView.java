@@ -134,10 +134,10 @@ public class PPCompositeTimeLineView extends PPAbstractTimeLineView {
 			lineview.addEvents(separator.getSeparated(), Color.CYAN.darker());
 			add(lineview);
 		}
-
 		{// TODO H24.1.21 保井追加 BlockEditorによる編集時間をライン表示
 			PPEventLineView lineview = new PPEventLineView(getTimeModel(),
 					getUnit());
+
 			List<PLLog> logs = getUnit().getOrderedLogs().select(
 					PLLogSelecters.BLOCKEDIT);
 			PLLogSeparator separator = new PLLogSeparator();

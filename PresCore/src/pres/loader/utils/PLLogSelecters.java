@@ -49,12 +49,13 @@ public class PLLogSelecters {
 	/**
 	 * TODO H24.1.21 保井追加 BlockEditorのログチェッカー
 	 */
+
 	public static ICChecker<PLLog> BLOCKEDIT = CLogSelecter
 			.createByType("BLOCK_COMMAND_RECORD");
 
 	public static ICChecker<PLLog> BLOCKEDIT_BIVI = CLogSelecter.createByType(
 			"BLOCKS_CONNECTED", "BLOCKS_DISCONNECTED");//分析対象によって変更するべき
-	
+
 }
 
 class CLogSelecter implements ICChecker<PLLog> {
