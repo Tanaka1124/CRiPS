@@ -23,6 +23,7 @@ public class PPSourceMetricsPane extends JPanel {
 	JSplitPane split = new JSplitPane();
 	private PPSourcePane sourcePane;
 	private IPLUnit selectedUnit;
+	private PPBlockPane blockPane;
 
 	/**
 	 * @param timeModel
@@ -46,7 +47,17 @@ public class PPSourceMetricsPane extends JPanel {
 			}
 		}, timeModel);
 		
-		split.setLeftComponent(sourcePane);
+		blockPane = new PPBlockPane(new IPLFileProvider() {
+			@Override
+			public PLFile getFile(CTime time) {
+				if (selectedUnit != null) {
+					return selectedUnit.getFile(time);
+				}
+				return unit.getFile(time);
+			}
+		}, timeModel);
+		
+		split.setLeftComponent(blockPane);
 
 		PPUtilitiesPane utilitiesPane = new PPUtilitiesPane(timeModel, unit);
 		split.setRightComponent(utilitiesPane);
@@ -64,6 +75,7 @@ public class PPSourceMetricsPane extends JPanel {
 		if (this.selectedUnit != selectedUnit) {
 			this.selectedUnit = selectedUnit;
 			sourcePane.refresh();
+			blockPane.refresh();
 		}
 	}
 

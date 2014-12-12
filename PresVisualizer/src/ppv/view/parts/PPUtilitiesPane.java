@@ -79,11 +79,11 @@ public class PPUtilitiesPane extends JPanel {
 				PLLogSelecters.TEXTEDIT);
 		editPointPane.setBorder(BorderFactory.createTitledBorder("EditPoint"));
 		northPanel.add(editPointPane);
-/*
+
 		PPCheckPointPane blockEditPointPane = new PPCheckPointPane(timeModel, unit, PLLogSelecters.BLOCKEDIT_BIVI);
 		blockEditPointPane.setBorder(BorderFactory.createTitledBorder("BlockEditPoint"));
 		northPanel.add(blockEditPointPane);
-*/
+		
 		// RightComponent
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new CVerticalFlowLayout());

@@ -53,7 +53,7 @@ public class PLLogSelecters {
 	public static ICChecker<PLLog> BLOCKEDIT = CLogSelecter
 			.createByType("BLOCK_COMMAND_RECORD");
 
-	public static ICChecker<PLLog> BLOCKEDIT_BIVI = CLogSelecter.createByType(
+	public static ICChecker<PLLog> BLOCKEDIT_BIVI = CLogSelecter.createBySubType(
 			"BLOCKS_CONNECTED", "BLOCKS_DISCONNECTED");//分析対象によって変更するべき
 
 }
