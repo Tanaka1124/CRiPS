@@ -62,8 +62,10 @@ public class SAutoSSTaker implements WorkspaceListener {
 		}
 		r.grow(10, 10);// margin
 		r = r.intersection(comp.getBounds());// マイナスにはみ出さない　　//compはスクロールするとマイナスになるためマイナスにはみ出す．つまり実質，機能してない
-		
-		r.setLocation(0, 0);//2014　12/11　たなか　応急処置　ブロックが左上ギリギリに存在するときに画面を右下にスクロールしてSSを撮影するとRectangleのx,yの値がマイナスをとり，例外になるため
+		if (r.getX() < 0 || r.getY() < 0) {//2014　12/13　たなか　応急処置　ブロックが左上ギリギリに存在するときに画面を右下にスクロールしてSSを撮影するとRectangleのx,yの値がマイナスをとり，例外になるため
+			r.setLocation(0, 0);
+		}
+
 		/*デバッグ用
 		 * 		System.out.println("Rectangle : height= " + r.getHeight() + " width= "
 						+ r.getWidth() + "x= " + r.getX() + " y= "
