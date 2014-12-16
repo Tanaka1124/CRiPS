@@ -60,7 +60,7 @@ public class PPBlockPane extends JPanel {
 		text.setText(blockPrintDir.toString());
 		//TODO　最終時刻のBlockを取得する
 		imgLabel.setIcon(new ImageIcon(new File(blockPrintDir,
-				"1418526238525.jpg").getAbsolutePath()));
+				current.getAsLong()+"jpg").getAbsolutePath()));
 
 		imgLabel.setVerticalAlignment(JLabel.TOP);
 		imgLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -89,7 +89,7 @@ public class PPBlockPane extends JPanel {
 	}
 
 	public void refresh() {
-		// current = timeModel.getTime();
+		current = timeModel.getTime();
 
 		// PLFile target = model.getFile(current);
 		// if (target == null) {
@@ -111,6 +111,9 @@ public class PPBlockPane extends JPanel {
 		// System.out.println("path = " + blockPrintDir);
 
 		// text.setText(current.getAsLong() + "");
+		imgLabel.setIcon(new ImageIcon(new File(blockPrintDir,
+				current.getAsLong()+"jpg").getAbsolutePath()));
+		System.out.println(current.getAsLong());
 	}
 
 	class HandScrollListener extends MouseAdapter {// TODO　ドラッグアンドドロップでの移動の実装
