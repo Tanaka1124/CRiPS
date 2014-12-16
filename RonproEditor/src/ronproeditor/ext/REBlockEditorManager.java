@@ -17,6 +17,9 @@ import pres.core.model.PRLog;
 import ronproeditor.ICFwResourceRepository;
 import ronproeditor.REApplication;
 import ronproeditor.helpers.CFrameUtils;
+import workspace.Workspace;
+import workspace.WorkspaceEvent;
+import workspace.WorkspaceListener;
 import a.slab.blockeditor.SBlockEditorListener;
 import bc.BlockConverter;
 import bc.apps.JavaToBlockMain;
@@ -45,12 +48,15 @@ public class REBlockEditorManager {
 		man.start();
 		man.setPriority(Thread.currentThread().getPriority() - 1);
 //		“€Œ‹
-//		Workspace.getInstance().addWorkspaceListener(new WorkspaceListener() {
-//			public void workspaceEventOccurred(WorkspaceEvent event) {
-//				writeBlockEditingLog(BlockEditorLog.SubType.ANY,
-//						event.toString());
-//			}
-//		});
+		Workspace.getInstance().addWorkspaceListener(new WorkspaceListener() {
+			public void workspaceEventOccurred(WorkspaceEvent event) {
+				
+				if (event.getEventType() == 5 || event.getEventType() == 6) {
+				writeBlockEditingLog(BlockEditorLog.SubType.ANY,
+						event.toString());
+				}
+			}
+		});
 
 		app.getSourceManager().addPropertyChangeListener(
 				new PropertyChangeListener() {
@@ -83,6 +89,7 @@ public class REBlockEditorManager {
 		blockEditor.loadFreshWorkspace();
 		blockEditor.createAndShowGUI(blockEditor, new SBlockEditorListener() {
 
+			
 			public void blockConverted(File file) {
 				writeBlockEditingLog(BlockEditorLog.SubType.BLOCK_TO_JAVA);
 				app.doRefreshCurrentEditor();
@@ -367,6 +374,24 @@ public class REBlockEditorManager {
 		}
 		return null;
 	}
+	private void writeBIViLog(BlockEditorLog.SubType subType,
+			String... texts) {
+		try {
+			if (!app.getSourceManager().hasCurrentFile()) {
+				return;
+			}
+
+			CPath path = app
+					.getSourceManager()
+					.getCCurrentFile()
+					.getRelativePath(
+							app.getSourceManager().getCCurrentProject());
+			PRLog log = new BlockEditorLog(subType, path, texts);
+			app.writePresLog(log);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 
 }
 
@@ -384,5 +409,22 @@ class BlockEditorLog extends PRFileLog {
 	 */
 	public BlockEditorLog(SubType subType, CPath path, Object[] args) {
 		super(Type.BLOCK_COMMAND_RECORD, subType, path, args);
+	}
+}
+
+class BIViLog extends PRFileLog {
+	public static enum Type implements PRLogType {
+		BIVi_RECORD
+	};
+
+	public static enum SubType implements PRLogSubType {
+		ANY, BLOCK_TO_JAVA, BLOCK_TO_JAVA_ERROR, JAVA_TO_BLOCK, JAVA_TO_BLOCK_ERROR, COMPILE, RUN, DEBUGRUN, OPENED, CLOSEED, FOCUS_GAINED, FOCUS_LOST, LOADING_START, LOADING_END,TOGGLE_TRACELINES
+	};
+
+	/**
+	 * Constructor
+	 */
+	public BIViLog(SubType subType, CPath path, Object[] args) {
+		super(Type.BIVi_RECORD, subType, path, args);
 	}
 }
