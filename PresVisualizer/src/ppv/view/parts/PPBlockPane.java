@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import pres.loader.model.IPLFileProvider;
-import sun.awt.HorizBagLayout;
+
 import clib.common.model.ICModelChangeListener;
 import clib.common.time.CTime;
 import clib.view.timeline.model.CTimeModel;
@@ -32,7 +32,6 @@ public class PPBlockPane extends JPanel {
 	private CTimeModel timeModel;
 	private CTime current;
 	private File blockPrintDir;
-	private JLabel text = new JLabel();
 	private JLabel imgLabel = new JLabel();
 	private JScrollPane scrollpane = new JScrollPane();
 
@@ -47,73 +46,45 @@ public class PPBlockPane extends JPanel {
 	}
 
 	private void initialize() {
-		// timeModel.addModelListener(new ICModelChangeListener() {
-		// public void modelUpdated(Object... args) {
-		// refresh();
-		// }
-		// });
+		timeModel.addModelListener(new ICModelChangeListener() {
+			public void modelUpdated(Object... args) {
+				refresh();
+			}
+		});
 
 		current = timeModel.getTime();
 
 		blockPrintDir = new File(new File(model.getFile(current).getDir()
 				.getAbsolutePath().toString()).getParentFile(), BLOCKPRINT_DIR);
-		text.setText(blockPrintDir.toString());
-		//TODO　最終時刻のBlockを取得する
-		imgLabel.setIcon(new ImageIcon(new File(blockPrintDir,
-				current.getAsLong()+"jpg").getAbsolutePath()));
+
+		imgLabel.setIcon(new ImageIcon(new File(blockPrintDir, current
+				.getAsLong() + ".jpg").getAbsolutePath()));
 
 		imgLabel.setVerticalAlignment(JLabel.TOP);
 		imgLabel.setHorizontalAlignment(JLabel.LEFT);
 
-		// setPreferredSize(new
-		// Dimension(this.getParent().getSize().width,getParent().getSize().height));
-		//TODO とりあえず表示はできるけど　Panelのサイズを取得してスクロールする部分がうまくいかないので固定値で．		
+		// TODO とりあえず表示はできるけど　Panelのサイズを取得してスクロールする部分がうまくいかないので固定値で．
 		scrollpane.setPreferredSize(new Dimension(600, 400));
 
 		JViewport view = new JViewport();
-
 		view.add(imgLabel);
 
 		scrollpane.setViewport(view);
 		scrollpane.getViewport().setBackground(Color.BLACK);
 
-		// scrollpane.add(imgLabel);
-		// add(scrollpane, BorderLayout.CENTER);
-		// add(imgLabel);
-
-		// setVisible(true);
 		add(scrollpane, BorderLayout.PAGE_START);
-		// System.out.println("ParentWidth = "+this.getParent().getWidth()+" parentHeight = "+this.getParent().getHeight());
-		// System.out.println("UIWidth = "+getUI().getPreferredSize(this).width+" UIHeight = "+getUI().getPreferredSize(this).height);
 
 	}
 
 	public void refresh() {
 		current = timeModel.getTime();
+		System.out.println("blockpane refresh = " + current.getAsLong());
 
-		// PLFile target = model.getFile(current);
-		// if (target == null) {
-		// return;
-		// }
-		// String sourceText = target.getSource(current);
-		// System.out.println(current.getAsLong());
-		// System.out.println("current = " + current);
-		// System.out.println("  getName = " + unit.getName());
-		// System.out.println("  getProject = " + unit.getProject());
-		// System.out.println("  getPath = " + unit.getPath());
-		// System.out.println("  getRange = " + unit.getRange());
-		// System.out.println("  getStart = " + unit.getStart());
-		// System.out.println("  getEnd = " + unit.getEnd());
-		// System.out.println("  getMaxLineCount = " + unit.getMaxLineCount());
-		// System.out.println("  getCurrentLineCount = "
-		// + unit.getLineCount(current));
+		File path = new File(blockPrintDir, current.getAsLong() + ".jpg");
+		if (path.exists()) {
+			imgLabel.setIcon(new ImageIcon(path.getAbsolutePath()));
+		}
 
-		// System.out.println("path = " + blockPrintDir);
-
-		// text.setText(current.getAsLong() + "");
-		imgLabel.setIcon(new ImageIcon(new File(blockPrintDir,
-				current.getAsLong()+"jpg").getAbsolutePath()));
-		System.out.println(current.getAsLong());
 	}
 
 	class HandScrollListener extends MouseAdapter {// TODO　ドラッグアンドドロップでの移動の実装

@@ -57,7 +57,7 @@ public class PPSourceMetricsPane extends JPanel {
 			}
 		}, timeModel);
 		
-		split.setLeftComponent(sourcePane);
+		split.setLeftComponent(blockPane);
 
 		PPUtilitiesPane utilitiesPane = new PPUtilitiesPane(timeModel, unit);
 		split.setRightComponent(utilitiesPane);
@@ -74,7 +74,6 @@ public class PPSourceMetricsPane extends JPanel {
 	public void setSelectedUnit(IPLUnit selectedUnit) {
 		if (this.selectedUnit != selectedUnit) {
 			this.selectedUnit = selectedUnit;
-			System.out.println("hogehoge");
 			sourcePane.refresh();
 			blockPane.refresh();
 		}

@@ -9,37 +9,34 @@ import renderable.RenderableBlock;
 import clib.view.screenshot.CScreenShotTaker;
 import workspace.BlockCanvas;
 import workspace.Workspace;
-import workspace.WorkspaceEvent;
-import workspace.WorkspaceListener;
 
-public class SAutoSSTaker implements WorkspaceListener {
+public class SAutoSSTaker {
 	File javaFilePath;
 	File saveDir;
 	long pictureName;
 	String saveDirName = "BlockPrint";
 
-	public void workspaceEventOccurred(WorkspaceEvent event) {
+	public void takeSS(Long timestamp) {
 		//		System.out.println(event.getEventType());
-		if (event.getEventType() == 5 || event.getEventType() == 6) { //BLOCKS_CONNECTED || BLOCKS_DISCONNECTED
-			javaFilePath = new File(Workspace.getInstance()
-					.getWorkSpaceController().getSelectedJavaFile());
-			saveDir = new File(new File(javaFilePath.getParent(), ".pres2"),
-					saveDirName);//.pres2->BlockPrint->pictureName.jpg
+		javaFilePath = new File(Workspace.getInstance()
+				.getWorkSpaceController().getSelectedJavaFile());
+		saveDir = new File(new File(javaFilePath.getParent(), ".pres2"),
+				saveDirName);//.pres2->BlockPrint->pictureName.jpg
 
-			if (!saveDir.exists()) { //無ければ生成
-				saveDir.mkdirs();
-			}
-
-			pictureName = System.currentTimeMillis();//pictureName is TimeMillis
-
-			while (new File(saveDir, String.valueOf(pictureName + ".jpg"))//もし被ったら困るので一応 被ったら1ミリ秒ズラす
-					.exists()) {
-				pictureName++;
-			}
-
-			createSSTaker().takeToFile(
-					new File(saveDir, String.valueOf(pictureName)));
+		if (!saveDir.exists()) { //無ければ生成
+			saveDir.mkdirs();
 		}
+
+		pictureName = timestamp;//pictureName is TimeMillis
+
+		while (new File(saveDir, String.valueOf(pictureName + ".jpg"))//もし被ったら困るので一応 被ったら1ミリ秒ズラす
+				.exists()) {
+			pictureName++;
+		}
+
+		createSSTaker().takeToFile(
+				new File(saveDir, String.valueOf(pictureName)));
+
 	}
 
 	public CScreenShotTaker createSSTaker() { //WorkspaceControllerから拝借

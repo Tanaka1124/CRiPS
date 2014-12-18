@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
+import pres.core.model.PRBIViLog;
 import pres.core.model.PRFileLog;
 import pres.core.model.PRLog;
 import ronproeditor.ICFwResourceRepository;
@@ -21,6 +22,7 @@ import workspace.Workspace;
 import workspace.WorkspaceEvent;
 import workspace.WorkspaceListener;
 import a.slab.blockeditor.SBlockEditorListener;
+import a.slab.blockeditor.extent.SAutoSSTaker;
 import bc.BlockConverter;
 import bc.apps.JavaToBlockMain;
 import clib.common.filesystem.CPath;
@@ -47,13 +49,12 @@ public class REBlockEditorManager {
 
 		man.start();
 		man.setPriority(Thread.currentThread().getPriority() - 1);
-//		“€Œ‹
+		// “€Œ‹
 		Workspace.getInstance().addWorkspaceListener(new WorkspaceListener() {
 			public void workspaceEventOccurred(WorkspaceEvent event) {
-				
+
 				if (event.getEventType() == 5 || event.getEventType() == 6) {
-				writeBlockEditingLog(BlockEditorLog.SubType.ANY,
-						event.toString());
+					writeBIViLog(BIViLog.BIViSubType.ANY, event.toString());
 				}
 			}
 		});
@@ -89,7 +90,6 @@ public class REBlockEditorManager {
 		blockEditor.loadFreshWorkspace();
 		blockEditor.createAndShowGUI(blockEditor, new SBlockEditorListener() {
 
-			
 			public void blockConverted(File file) {
 				writeBlockEditingLog(BlockEditorLog.SubType.BLOCK_TO_JAVA);
 				app.doRefreshCurrentEditor();
@@ -117,12 +117,13 @@ public class REBlockEditorManager {
 
 			public void chengeInheritance() {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			public void toggleTraceLines(String state) {
-					writeBlockEditingLog(BlockEditorLog.SubType.TOGGLE_TRACELINES, state);
-			}			
+				writeBlockEditingLog(BlockEditorLog.SubType.TOGGLE_TRACELINES,
+						state);
+			}
 
 		}, REApplication.SRC_ENCODING);
 		blockEditor.getFrame().addWindowFocusListener(
@@ -374,8 +375,8 @@ public class REBlockEditorManager {
 		}
 		return null;
 	}
-	private void writeBIViLog(BlockEditorLog.SubType subType,
-			String... texts) {
+
+	private void writeBIViLog(BIViLog.BIViSubType subType, String... texts) {
 		try {
 			if (!app.getSourceManager().hasCurrentFile()) {
 				return;
@@ -386,7 +387,10 @@ public class REBlockEditorManager {
 					.getCCurrentFile()
 					.getRelativePath(
 							app.getSourceManager().getCCurrentProject());
-			PRLog log = new BlockEditorLog(subType, path, texts);
+			Long timestamp = System.currentTimeMillis();
+			SAutoSSTaker taker = new SAutoSSTaker();
+			taker.takeSS(timestamp);
+			PRLog log = new BIViLog(timestamp, subType, path, texts);
 			app.writePresLog(log);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -401,7 +405,7 @@ class BlockEditorLog extends PRFileLog {
 	};
 
 	public static enum SubType implements PRLogSubType {
-		ANY, BLOCK_TO_JAVA, BLOCK_TO_JAVA_ERROR, JAVA_TO_BLOCK, JAVA_TO_BLOCK_ERROR, COMPILE, RUN, DEBUGRUN, OPENED, CLOSEED, FOCUS_GAINED, FOCUS_LOST, LOADING_START, LOADING_END,TOGGLE_TRACELINES
+		ANY, BLOCK_TO_JAVA, BLOCK_TO_JAVA_ERROR, JAVA_TO_BLOCK, JAVA_TO_BLOCK_ERROR, COMPILE, RUN, DEBUGRUN, OPENED, CLOSEED, FOCUS_GAINED, FOCUS_LOST, LOADING_START, LOADING_END, TOGGLE_TRACELINES
 	};
 
 	/**
@@ -412,19 +416,20 @@ class BlockEditorLog extends PRFileLog {
 	}
 }
 
-class BIViLog extends PRFileLog {
+class BIViLog extends PRBIViLog {
 	public static enum Type implements PRLogType {
 		BIVi_RECORD
 	};
 
-	public static enum SubType implements PRLogSubType {
-		ANY, BLOCK_TO_JAVA, BLOCK_TO_JAVA_ERROR, JAVA_TO_BLOCK, JAVA_TO_BLOCK_ERROR, COMPILE, RUN, DEBUGRUN, OPENED, CLOSEED, FOCUS_GAINED, FOCUS_LOST, LOADING_START, LOADING_END,TOGGLE_TRACELINES
+	public static enum BIViSubType implements PRLogSubType {
+		ANY, BLOCK_TO_JAVA, BLOCK_TO_JAVA_ERROR, JAVA_TO_BLOCK, JAVA_TO_BLOCK_ERROR, COMPILE, RUN, DEBUGRUN, OPENED, CLOSEED, FOCUS_GAINED, FOCUS_LOST, LOADING_START, LOADING_END, TOGGLE_TRACELINES
 	};
 
 	/**
 	 * Constructor
 	 */
-	public BIViLog(SubType subType, CPath path, Object[] args) {
-		super(Type.BIVi_RECORD, subType, path, args);
+	public BIViLog(long timestamp, BIViSubType subType, CPath path,
+			Object[] args) {
+		super(timestamp, Type.BIVi_RECORD, subType, path, args);
 	}
 }

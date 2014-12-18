@@ -236,7 +236,30 @@ public class PLLogReader {
 
 			return log;
 
-		} else {
+		} else if (typeString.equals("BIVi_RECORD")) {
+
+			//2014　12/18　たなか追加　BIVi用
+
+			String path = tokenizer.nextToken();
+			String message = "";
+
+			//BlockEditorのログのメッセージからBlockEditorのコマンドを取得する
+			String subType = "";
+			if (subTypeString.equals("ANY")) {
+				message = tokenizer.nextToken();
+				subType = message.substring(message.indexOf('(') + 1,
+						message.indexOf(':'));
+			} else {
+				subType = subTypeString;
+			}
+
+			PLBlockCommandLog blocklog = new PLBlockCommandLog(time, subType,
+					new CPath(path));
+			blocklog.setMessage(message);
+			return blocklog;
+
+		}
+		{
 			throw new RuntimeException("Unknown Log Type: " + typeString);
 		}
 	}

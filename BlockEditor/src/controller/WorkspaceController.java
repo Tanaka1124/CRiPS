@@ -58,7 +58,6 @@ import workspace.WorkspaceEvent;
 import workspace.WorkspaceListener;
 import a.slab.blockeditor.SBlockEditor;
 import a.slab.blockeditor.SBlockEditorListener;
-import a.slab.blockeditor.extent.SAutoSSTaker;
 import a.slab.blockeditor.extent.SAutoXMLSaver;
 import bc.apps.BlockToJavaMain;
 import bc.apps.JavaToBlockMain;
@@ -293,8 +292,8 @@ public class WorkspaceController {
 		BlockLinkChecker.addRule(new InfixRule());
 		// arranged by sakai lab 2011/11/21
 		// BlockLinkChecker.addRule(new CallMethodRule());
-		workspace.addWorkspaceListener(new SAutoSSTaker());
-		workspace.addWorkspaceListener(new SAutoXMLSaver());;
+		workspace.addWorkspaceListener(new SAutoXMLSaver());
+		;
 
 		// set the dirty flag for the language definition file
 		// to false now that the lang file has been loaded
@@ -790,7 +789,7 @@ public class WorkspaceController {
 	 * メソッド呼び出し関係を表示するラインを描画します
 	 */
 	public void showAllTraceLine() {
-		if(DrawingArrowManager.isActive()){
+		if (DrawingArrowManager.isActive()) {
 			List<Block> bodyBlocks = new ArrayList<Block>();
 			for (Block block : workspace.getBlocks()) {
 				// 呼び出しブロックにラインを表示する
@@ -815,27 +814,29 @@ public class WorkspaceController {
 					rBlock = RenderableBlock.getRenderableBlock(parent
 							.getAfterBlockID());
 				} else {
-					rBlock = RenderableBlock.getRenderableBlock(parent.getSocketAt(0).getBlockID());
+					rBlock = RenderableBlock.getRenderableBlock(parent
+							.getSocketAt(0).getBlockID());
 				}
 				if (rBlock != null) {
 					hideTraceLines(rBlock);
 				}
-			}	
+			}
 		}
 	}
 
 	public void hideTraceLines(RenderableBlock rBlock) {
-			while (rBlock != null && DrawingArrowManager.hasNoAfterBlock(rBlock.getBlock())) {
-				hideTraceLine(rBlock);
-				rBlock = RenderableBlock.getRenderableBlock(rBlock.getBlock()
-						.getAfterBlockID());
-			}
+		while (rBlock != null
+				&& DrawingArrowManager.hasNoAfterBlock(rBlock.getBlock())) {
+			hideTraceLine(rBlock);
+			rBlock = RenderableBlock.getRenderableBlock(rBlock.getBlock()
+					.getAfterBlockID());
+		}
 
-			hideTraceLine(rBlock);	
+		hideTraceLine(rBlock);
 	}
 
 	public void hideTraceLine(RenderableBlock rBlock) {
-		if(rBlock != null){
+		if (rBlock != null) {
 			if (rBlock.hasArrows()) {
 				rBlock.visibleArrows(false);
 			}
@@ -847,7 +848,7 @@ public class WorkspaceController {
 					hideTraceLines(RenderableBlock.getRenderableBlock(socket
 							.getBlockID()));
 				}
-			}	
+			}
 		}
 	}
 
@@ -858,12 +859,15 @@ public class WorkspaceController {
 					.getJComponent();
 			//メソッド定義ブロックと，呼び出しブロックを直線で結ぶ
 			BlockStub stub = (BlockStub) (callerBlock.getBlock());
-			RenderableBlock parentBlock = RenderableBlock.getRenderableBlock(stub.getParent().getBlockID());
+			RenderableBlock parentBlock = RenderableBlock
+					.getRenderableBlock(stub.getParent().getBlockID());
 			if (parentBlock != null) {
 				//呼び出しブロックの座標
-				Point p1 = DrawingArrowManager.calcCallerBlockPoint(callerBlock);
+				Point p1 = DrawingArrowManager
+						.calcCallerBlockPoint(callerBlock);
 				//呼び出し関数の定義ファイル
-				Point p2 = DrawingArrowManager.calcDefinisionBlockPoint(parentBlock);
+				Point p2 = DrawingArrowManager
+						.calcDefinisionBlockPoint(parentBlock);
 				ArrowObject arrow = new MultiJointArrowObject(p1, p2);
 				Page parentPage = (Page) callerBlock.getParentWidget();
 				parentPage.addArrow(arrow);
@@ -900,7 +904,8 @@ public class WorkspaceController {
 		List<String> params = calcParamTypes(stub);
 
 		for (Block block : workspace.getBlocks()) {
-			RenderableBlock rb = RenderableBlock.getRenderableBlock(block.getBlockID());
+			RenderableBlock rb = RenderableBlock.getRenderableBlock(block
+					.getBlockID());
 			if (rb.getGenus().equals("procedure")
 					&& rb.getBlock().getBlockLabel().equals(name)
 					&& checkParameterType(block, params)) {
