@@ -138,6 +138,7 @@ public class PPSourcePane extends JPanel {
 			before = log;
 			logs.remove(log);
 		}
+
 		return editLogs;
 	}
 
@@ -192,5 +193,22 @@ public class PPSourcePane extends JPanel {
 	// public void setSourceText(String sourceText) {
 	// CTextPaneUtils.setTextWithoutScrolling(sourceText, textPane);
 	// }
+	public long getCurrentTextEditLogTimestamp() {
+		CTime current = timeModel.getTime();
+		PLFile target = model.getFile(current);
+		long timestamp = 0;
 
+		if (target == null) {
+			return timestamp;
+		}
+
+		CTimeOrderedList<PLLog> logs = target.getOrderedLogs().select(
+				PLFile.LOG_TEXTEDIT_CHECKER);
+		List<PLTextEditLog> editLogs = searchLogs(logs);
+
+		if (editLogs.size() != 0) {
+			timestamp = editLogs.get(editLogs.size() - 1).getTimestamp();
+		}
+		return timestamp;
+	}
 }

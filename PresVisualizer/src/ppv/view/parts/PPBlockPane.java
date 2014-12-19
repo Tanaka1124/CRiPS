@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +31,7 @@ public class PPBlockPane extends JPanel {
 	private JLabel imgLabel = new JLabel();
 	private JScrollPane scrollpane = new JScrollPane();
 	private long[] blockImages;
+	private long currentImgStamp = 0;
 
 	boolean canUpDownf = true;
 
@@ -47,6 +47,8 @@ public class PPBlockPane extends JPanel {
 		timeModel.addModelListener(new ICModelChangeListener() {
 			public void modelUpdated(Object... args) {
 				refresh();
+				System.out.println("blockpane current Img Stamp = "
+						+ currentImgStamp);
 			}
 		});
 
@@ -86,13 +88,18 @@ public class PPBlockPane extends JPanel {
 		if (imgIndex >= blockImages.length) {
 			imgIndex = blockImages.length - 1;
 		}
+		currentImgStamp = blockImages[imgIndex];
 
 		File path = new File(blockPrintDir, blockImages[imgIndex] + ".jpg");
 
-		if (path.exists()) {//いる？
+		if (path.exists()) {// いる？
 			imgLabel.setIcon(new ImageIcon(path.getAbsolutePath()));
 		}
 
+	}
+
+	public long getCurrentImgStamp() {
+		return currentImgStamp;
 	}
 }
 

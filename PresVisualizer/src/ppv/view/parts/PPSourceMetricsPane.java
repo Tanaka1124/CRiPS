@@ -7,10 +7,13 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import pres.loader.logmodel.PLLog;
 import pres.loader.model.IPLFileProvider;
 import pres.loader.model.IPLUnit;
 import pres.loader.model.PLFile;
+import clib.common.model.ICModelChangeListener;
 import clib.common.time.CTime;
+import clib.common.time.CTimeOrderedList;
 import clib.view.timeline.model.CTimeModel;
 
 public class PPSourceMetricsPane extends JPanel {
@@ -46,7 +49,7 @@ public class PPSourceMetricsPane extends JPanel {
 				return unit.getFile(time);
 			}
 		}, timeModel);
-		
+
 		blockPane = new PPBlockPane(new IPLFileProvider() {
 			@Override
 			public PLFile getFile(CTime time) {
@@ -56,7 +59,20 @@ public class PPSourceMetricsPane extends JPanel {
 				return unit.getFile(time);
 			}
 		}, timeModel);
-		
+
+		timeModel.addModelListener(new ICModelChangeListener() {
+
+			@Override
+			public void modelUpdated(Object... args) {
+
+					if (sourcePane.getCurrentTextEditLogTimestamp() > blockPane.getCurrentImgStamp()) {
+						split.setLeftComponent(sourcePane);
+					} else {
+						split.setLeftComponent(blockPane);
+					}
+			}
+		});
+
 		split.setLeftComponent(blockPane);
 
 		PPUtilitiesPane utilitiesPane = new PPUtilitiesPane(timeModel, unit);
@@ -74,6 +90,7 @@ public class PPSourceMetricsPane extends JPanel {
 	public void setSelectedUnit(IPLUnit selectedUnit) {
 		if (this.selectedUnit != selectedUnit) {
 			this.selectedUnit = selectedUnit;
+
 			sourcePane.refresh();
 			blockPane.refresh();
 		}
