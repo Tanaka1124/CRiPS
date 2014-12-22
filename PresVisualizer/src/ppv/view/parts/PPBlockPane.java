@@ -47,8 +47,6 @@ public class PPBlockPane extends JPanel {
 		timeModel.addModelListener(new ICModelChangeListener() {
 			public void modelUpdated(Object... args) {
 				refresh();
-				System.out.println("blockpane current Img Stamp = "
-						+ currentImgStamp);
 			}
 		});
 
@@ -88,8 +86,11 @@ public class PPBlockPane extends JPanel {
 		if (imgIndex >= blockImages.length) {
 			imgIndex = blockImages.length - 1;
 		}
-		currentImgStamp = blockImages[imgIndex];
-
+		if (blockImages[0] <= current.getAsLong()) {
+			currentImgStamp = blockImages[imgIndex];
+		} else {
+			currentImgStamp = 0;
+		}
 		File path = new File(blockPrintDir, blockImages[imgIndex] + ".jpg");
 
 		if (path.exists()) {// いる？

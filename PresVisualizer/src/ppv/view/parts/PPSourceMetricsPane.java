@@ -64,6 +64,10 @@ public class PPSourceMetricsPane extends JPanel {
 
 			@Override
 			public void modelUpdated(Object... args) {
+//				System.out.println("blockpane current Img Stamp   = "
+//						+ blockPane.getCurrentImgStamp());
+//				System.out.println("sourcePane current text Stamp = "
+//						+ sourcePane.getCurrentTextEditLogTimestamp()+"\n");
 
 					if (sourcePane.getCurrentTextEditLogTimestamp() > blockPane.getCurrentImgStamp()) {
 						split.setLeftComponent(sourcePane);
