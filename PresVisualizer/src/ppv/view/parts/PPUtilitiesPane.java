@@ -6,9 +6,13 @@
 package ppv.view.parts;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -27,6 +31,18 @@ public class PPUtilitiesPane extends JPanel {
 
 	private CTimeModel timeModel;
 	private IPLUnit unit;
+	String[] combodata = { "ALL", "BLOCKEDIT_BIVI_CONNECTED",
+			"BLOCKEDIT_BIVI_DISCONNECTED", "BLOCKEDIT_BIVI_CONNECT_MISSED",
+			"BLOCKEDIT_BIVI_ADDED" };
+	JComboBox<String> combo = new JComboBox<String>(combodata);
+	private JPanel northPanel;
+	JPanel bEPointPane;
+	CardLayout layout;
+	PPCheckPointPane blockEditPointPane;
+	PPCheckPointPane blockEditPointPaneConnected;
+	PPCheckPointPane blockEditPointPaneDisconnected;
+	PPCheckPointPane blockEditPointPaneConnectmissed;
+	PPCheckPointPane blockEditPointPaneAdded;
 
 	/**
 	 * @param timePane
@@ -46,7 +62,7 @@ public class PPUtilitiesPane extends JPanel {
 		add(splitter);
 
 		// LeftComponent
-		JPanel northPanel = new JPanel();
+		northPanel = new JPanel();
 		splitter.setLeftComponent(new JScrollPane(northPanel));
 		northPanel.setLayout(new CVerticalFlowLayout());
 
@@ -80,10 +96,77 @@ public class PPUtilitiesPane extends JPanel {
 		editPointPane.setBorder(BorderFactory.createTitledBorder("EditPoint"));
 		northPanel.add(editPointPane);
 
-		PPCheckPointPane blockEditPointPane = new PPCheckPointPane(timeModel, unit, PLLogSelecters.BLOCKEDIT_BIVI);
-		blockEditPointPane.setBorder(BorderFactory.createTitledBorder("BlockEditPoint"));
-		northPanel.add(blockEditPointPane);
 		
+		
+		blockEditPointPane = new PPCheckPointPane(timeModel,
+				unit, PLLogSelecters.BLOCKEDIT_BIVI);
+		blockEditPointPane.setBorder(BorderFactory
+				.createTitledBorder("BlockEditPoint"));
+		
+		blockEditPointPaneConnected = new PPCheckPointPane(
+				timeModel, unit, PLLogSelecters.BLOCKEDIT_BIVI_CONNECTED);
+		blockEditPointPaneConnected.setBorder(BorderFactory
+				.createTitledBorder("BlockEditPoint-Connected"));
+		
+		blockEditPointPaneDisconnected = new PPCheckPointPane(
+				timeModel, unit, PLLogSelecters.BLOCKEDIT_BIVI_DISCONNECTED);
+		blockEditPointPaneDisconnected.setBorder(BorderFactory
+				.createTitledBorder("BlockEditPoint-Disconnected"));
+		
+		blockEditPointPaneConnectmissed = new PPCheckPointPane(
+				timeModel, unit, PLLogSelecters.BLOCKEDIT_BIVI_CONNECT_MISSED);
+		blockEditPointPaneConnectmissed.setBorder(BorderFactory
+				.createTitledBorder("BlockEditPoint-ConnectMissed"));
+		
+		blockEditPointPaneAdded = new PPCheckPointPane(
+				timeModel, unit, PLLogSelecters.BLOCKEDIT_BIVI_ADDED);
+		blockEditPointPaneAdded.setBorder(BorderFactory
+				.createTitledBorder("BlockEditPoint-Added"));
+
+		combo.setMaximumRowCount(5);
+		bEPointPane = new JPanel();
+		layout = new CardLayout();
+
+		bEPointPane.setLayout(layout);
+		
+		bEPointPane.add(blockEditPointPane,"all");
+		bEPointPane.add(blockEditPointPaneConnected,"connected");
+		bEPointPane.add(blockEditPointPaneDisconnected,"disconneced");
+		bEPointPane.add(blockEditPointPaneConnectmissed,"connectMissed");
+		bEPointPane.add(blockEditPointPaneAdded,"add");
+		
+		combo.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(combo.getSelectedIndex());
+				if (combo.getSelectedIndex() != -1) {
+					switch (combo.getSelectedIndex()) {
+					case 0:
+						layout.show(bEPointPane,"all");
+						break;
+					case 1:
+						layout.show(bEPointPane,"connected");
+						break;
+					case 2:
+						layout.show(bEPointPane,"disconneced");
+						break;
+					case 3:
+						layout.show(bEPointPane,"connectMissed");
+						break;
+					case 4:
+						layout.show(bEPointPane,"add");
+						break;
+
+					}
+				}
+
+			}
+		});
+		northPanel.add(combo);
+
+		northPanel.add(bEPointPane);
+
 		// RightComponent
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new CVerticalFlowLayout());

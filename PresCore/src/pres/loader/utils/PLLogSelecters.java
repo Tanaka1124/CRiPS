@@ -53,8 +53,16 @@ public class PLLogSelecters {
 	public static ICChecker<PLLog> BLOCKEDIT = CLogSelecter
 			.createByType("BLOCK_COMMAND_RECORD");
 
-	public static ICChecker<PLLog> BLOCKEDIT_BIVI = CLogSelecter.createBySubType(
-			"BLOCKS_CONNECTED", "BLOCKS_DISCONNECTED");//分析対象によって変更するべき
+	public static ICChecker<PLLog> BLOCKEDIT_BIVI = CLogSelecter
+			.createBySubType("BLOCKS_CONNECTED","BLOCKS_DISCONNECTED","BLOCK_ADDED","BLOCKS_CONNECT_MISSED");//分析対象によって変更するべき
+	public static ICChecker<PLLog> BLOCKEDIT_BIVI_CONNECTED = CLogSelecter
+			.createBySubType("BLOCKS_CONNECTED");//分析対象によって変更するべき
+	public static ICChecker<PLLog> BLOCKEDIT_BIVI_DISCONNECTED = CLogSelecter
+			.createBySubType("BLOCKS_DISCONNECTED");//分析対象によって変更するべき
+	public static ICChecker<PLLog> BLOCKEDIT_BIVI_ADDED = CLogSelecter
+			.createBySubType("BLOCK_ADDED");//分析対象によって変更するべき
+	public static ICChecker<PLLog> BLOCKEDIT_BIVI_CONNECT_MISSED = CLogSelecter
+			.createBySubType("BLOCKS_CONNECT_MISSED");//分析対象によって変更するべき
 
 }
 
