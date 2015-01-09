@@ -15,6 +15,9 @@ public class WorkspaceEvent {
 
 	public final static int BLOCK_REMOVED = 4;
 	public final static int BLOCKS_CONNECTED = 5;
+	
+	public final static int BLOCKS_CONNECT_MISSED = 21;
+	
 	public final static int BLOCKS_DISCONNECTED = 6;
 	public final static int BLOCK_STACK_COMPILED = 7;
 
@@ -219,6 +222,10 @@ public class WorkspaceEvent {
 					+ ")";
 		case BLOCKS_CONNECTED:
 			return "WorkspaceEvent(BLOCKS_CONNECTED: " + link + ")";
+			
+		case BLOCKS_CONNECT_MISSED:
+			return "WorkspaceEvent(BLOCKS_CONNECT_MISSED: " + link + ")";
+			
 		case BLOCKS_DISCONNECTED:
 			return "WorkspaceEvent(BLOCKS_DISCONNECTED: " + link + ")";
 		case BLOCK_STACK_COMPILED:

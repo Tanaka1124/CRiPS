@@ -53,7 +53,9 @@ public class REBlockEditorManager {
 		Workspace.getInstance().addWorkspaceListener(new WorkspaceListener() {
 			public void workspaceEventOccurred(WorkspaceEvent event) {
 
-				if (event.getEventType() == 5 || event.getEventType() == 6|| event.getEventType() == 20) {
+				if (event.getEventType() == 5 || event.getEventType() == 6
+						|| event.getEventType() == 20
+						|| event.getEventType() == 21) {
 					System.out.println(event.getEventType());
 					writeBIViLog(BIViLog.BIViSubType.ANY, event.toString());
 				}
