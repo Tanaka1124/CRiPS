@@ -56,7 +56,6 @@ public class REBlockEditorManager {
 				if (event.getEventType() == 5 || event.getEventType() == 6
 						|| event.getEventType() == 20
 						|| event.getEventType() == 21) {
-					System.out.println(event.getEventType());
 					writeBIViLog(BIViLog.BIViSubType.ANY, event.toString());
 				}
 			}

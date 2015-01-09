@@ -2152,7 +2152,6 @@ public class RenderableBlock extends JComponent implements SearchableElement,
 					.getY()
 					+ RenderableBlock.getRenderableBlock(blockID).getWidth(),
 					"down");
-			System.out.println("CONNECT_MISS");
 			Workspace.getInstance().notifyListeners(
 					new WorkspaceEvent(widget, link,
 							WorkspaceEvent.BLOCKS_CONNECT_MISSED));
