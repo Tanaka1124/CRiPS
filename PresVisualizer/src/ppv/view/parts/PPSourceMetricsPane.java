@@ -1,10 +1,12 @@
 package ppv.view.parts;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import pres.loader.logmodel.PLLog;
@@ -27,6 +29,7 @@ public class PPSourceMetricsPane extends JPanel {
 	private PPSourcePane sourcePane;
 	private IPLUnit selectedUnit;
 	private PPBlockPane blockPane;
+	private JScrollPane blockPaneInSP;
 
 	/**
 	 * @param timeModel
@@ -59,7 +62,11 @@ public class PPSourceMetricsPane extends JPanel {
 				return unit.getFile(time);
 			}
 		}, timeModel);
+		FlowLayout layout = new FlowLayout();//blockpaneの配置
+		layout.setAlignment(FlowLayout.LEFT);
+		blockPane.setLayout(layout);
 
+		
 		timeModel.addModelListener(new ICModelChangeListener() {
 
 			@Override
@@ -72,12 +79,12 @@ public class PPSourceMetricsPane extends JPanel {
 					if (sourcePane.getCurrentTextEditLogTimestamp() > blockPane.getCurrentImgStamp()) {
 						split.setLeftComponent(sourcePane);
 					} else {
-						split.setLeftComponent(blockPane);
+						split.setLeftComponent(blockPaneInSP);
 					}
 			}
 		});
-
-		split.setLeftComponent(blockPane);
+		blockPaneInSP = new JScrollPane(blockPane);
+		split.setLeftComponent(blockPaneInSP);
 
 		PPUtilitiesPane utilitiesPane = new PPUtilitiesPane(timeModel, unit);
 		split.setRightComponent(utilitiesPane);

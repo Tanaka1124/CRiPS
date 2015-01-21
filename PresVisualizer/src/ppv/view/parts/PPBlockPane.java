@@ -49,7 +49,7 @@ public class PPBlockPane extends JPanel {
 				refresh();
 			}
 		});
-
+		setBackground(Color.BLACK);
 		current = timeModel.getTime();
 		blockPrintDir = new File(new File(model.getFile(current).getDir()
 				.getAbsolutePath().toString()).getParentFile(), BLOCKPRINT_DIR);
@@ -59,17 +59,8 @@ public class PPBlockPane extends JPanel {
 				.getAsLong() + ".jpg").getAbsolutePath()));
 		imgLabel.setVerticalAlignment(JLabel.TOP);
 		imgLabel.setHorizontalAlignment(JLabel.LEFT);
-
-		JViewport view = new JViewport();
-		view.add(imgLabel);
-
-		// TODO とりあえず表示はできるけど　Panelのサイズを取得してスクロールする部分がうまくいかないので固定値で仮実装
-		scrollpane.setPreferredSize(new Dimension(600, 400));
-
-		scrollpane.setViewport(view);
-		scrollpane.getViewport().setBackground(Color.BLACK);
-
-		add(scrollpane, BorderLayout.PAGE_START);
+		
+		add(imgLabel);
 
 	}
 
