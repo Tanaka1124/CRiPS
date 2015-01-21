@@ -31,9 +31,9 @@ public class PPUtilitiesPane extends JPanel {
 
 	private CTimeModel timeModel;
 	private IPLUnit unit;
-	String[] combodata = { "ALL", "BLOCKEDIT_BIVI_CONNECTED",
-			"BLOCKEDIT_BIVI_DISCONNECTED", "BLOCKEDIT_BIVI_CONNECT_MISSED",
-			"BLOCKEDIT_BIVI_ADDED" };
+	String[] combodata = { "ALL", "CONNECTED",
+			"DISCONNECTED", "CONNECT_MISSED",
+			"ADDED" };
 	JComboBox<String> combo = new JComboBox<String>(combodata);
 	private JPanel northPanel;
 	JPanel bEPointPane;

@@ -9,13 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import pres.loader.logmodel.PLLog;
 import pres.loader.model.IPLFileProvider;
 import pres.loader.model.IPLUnit;
 import pres.loader.model.PLFile;
 import clib.common.model.ICModelChangeListener;
 import clib.common.time.CTime;
-import clib.common.time.CTimeOrderedList;
 import clib.view.timeline.model.CTimeModel;
 
 public class PPSourceMetricsPane extends JPanel {
@@ -62,25 +60,25 @@ public class PPSourceMetricsPane extends JPanel {
 				return unit.getFile(time);
 			}
 		}, timeModel);
-		FlowLayout layout = new FlowLayout();//blockpaneの配置
+		FlowLayout layout = new FlowLayout();// blockpaneの配置
 		layout.setAlignment(FlowLayout.LEFT);
 		blockPane.setLayout(layout);
 
-		
 		timeModel.addModelListener(new ICModelChangeListener() {
 
 			@Override
 			public void modelUpdated(Object... args) {
-//				System.out.println("blockpane current Img Stamp   = "
-//						+ blockPane.getCurrentImgStamp());
-//				System.out.println("sourcePane current text Stamp = "
-//						+ sourcePane.getCurrentTextEditLogTimestamp()+"\n");
+				// System.out.println("blockpane current Img Stamp   = "
+				// + blockPane.getCurrentImgStamp());
+				// System.out.println("sourcePane current text Stamp = "
+				// + sourcePane.getCurrentTextEditLogTimestamp()+"\n");
 
-					if (sourcePane.getCurrentTextEditLogTimestamp() > blockPane.getCurrentImgStamp()) {
-						split.setLeftComponent(sourcePane);
-					} else {
-						split.setLeftComponent(blockPaneInSP);
-					}
+				if (sourcePane.getCurrentTextEditLogTimestamp() > blockPane
+						.getCurrentImgStamp()) {
+					split.setLeftComponent(sourcePane);
+				} else {
+					split.setLeftComponent(blockPaneInSP);
+				}
 			}
 		});
 		blockPaneInSP = new JScrollPane(blockPane);

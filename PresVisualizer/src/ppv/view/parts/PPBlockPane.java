@@ -1,8 +1,7 @@
 package ppv.view.parts;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
@@ -10,8 +9,6 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JViewport;
 
 import pres.loader.model.IPLFileProvider;
 import clib.common.model.ICModelChangeListener;
@@ -29,7 +26,6 @@ public class PPBlockPane extends JPanel {
 	private CTime current;
 	private File blockPrintDir;
 	private JLabel imgLabel = new JLabel();
-	private JScrollPane scrollpane = new JScrollPane();
 	private long[] blockImages;
 	private long currentImgStamp = 0;
 
@@ -59,7 +55,7 @@ public class PPBlockPane extends JPanel {
 				.getAsLong() + ".jpg").getAbsolutePath()));
 		imgLabel.setVerticalAlignment(JLabel.TOP);
 		imgLabel.setHorizontalAlignment(JLabel.LEFT);
-		
+
 		add(imgLabel);
 
 	}
