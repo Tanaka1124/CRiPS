@@ -63,14 +63,13 @@ public class SAutoSSTaker {
 			r.setLocation(0, 0);
 		}
 
-		/*デバッグ用
-		 * 		System.out.println("Rectangle : height= " + r.getHeight() + " width= "
-						+ r.getWidth() + "x= " + r.getX() + " y= "
-						+ r.getY());
-				System.out.println("Canvas : height= " + comp.getHeight() + " width= "
-						+ comp.getWidth() + "x= " + comp.getX() + " y= "
-						+ comp.getY());
-		*/
+		r.setSize((int) r.getWidth(), (int) r.getHeight() + 80);
+
+//		System.out.println("Rectangle : height= " + r.getHeight() + " width= "
+//				+ r.getWidth() + "x= " + r.getX() + " y= " + r.getY());
+//		System.out.println("Canvas : height= " + comp.getHeight() + " width= "
+//				+ comp.getWidth() + "x= " + comp.getX() + " y= " + comp.getY());
+
 		CScreenShotTaker taker = new CScreenShotTaker(comp);
 		taker.setClipbounds(r);
 		return taker;
