@@ -21,6 +21,32 @@
 	<classpathentry exported="true" kind="lib" path="lib/starlogotng.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/TableLayout.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/super-csv-2.1.0.jar"/>
-	<classpathentry kind="lib" path="/CPreferenceFW/bin/clib/preference/model"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonLibraryPlugin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CPreferenceFW"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BlockConverter"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BlockEditor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BSound"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CChart"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CEncodingDetector"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CheCoPro"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CheCoProServer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CocoViewer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CompileErrorAnalytics"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CSwing"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CSwingApp"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CTable"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CTimeLineView"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CTimeLineViewTestApp"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CUpdater"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FlowViewer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NoviceDebugger"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PresCore"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PresCorePlugin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PresPlugin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PresVisualizer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RonproEditor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RonproEditorSupportTool"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,6 +3,7 @@ package controller;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.html.HTMLDocument.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -74,6 +76,9 @@ import codeblocks.BlockStub;
 import codeblocks.CommandRule;
 import codeblocks.InfixRule;
 import codeblocks.SocketRule;
+import drawingobjects.ArrowObject;
+import drawingobjects.DrawingArrowManager;
+import drawingobjects.MultiJointArrowObject;
 
 /**
  *
@@ -305,6 +310,7 @@ public class WorkspaceController {
 		BlockLinkChecker.addRule(new InfixRule());
 		// arranged by sakai lab 2011/11/21
 		// BlockLinkChecker.addRule(new CallMethodRule());
+		;
 
 		// set the dirty flag for the language definition file
 		// to false now that the lang file has been loaded
@@ -799,6 +805,117 @@ public class WorkspaceController {
 
 	}
 
+	public void disposeTraceLine() {
+		if (workspace.getBlockCanvas() != null) {
+			workspace.getPageNamed(calcClassName()).clearArrowLayer();
+			workspace.getPageNamed(calcClassName()).getJComponent().repaint();
+			DrawingArrowManager.clearPossessers();
+		}
+	}
+
+	/*
+	 * メソッド呼び出し関係を表示するラインを描画します
+	 */
+	public void showAllTraceLine() {
+		if (DrawingArrowManager.isActive()) {
+			List<Block> bodyBlocks = new ArrayList<Block>();
+			for (Block block : workspace.getBlocks()) {
+				// 呼び出しブロックにラインを表示する
+				RenderableBlock callerblock = RenderableBlock
+						.getRenderableBlock(block.getBlockID());
+
+				if (callerblock.getGenus().startsWith("caller")) {
+					addTraceLine(callerblock);
+				}
+
+				if (callerblock.getGenus().equals("procedure")
+						|| callerblock.getGenus().equals("abstraction")) {
+					if (callerblock.isCollapsed()) {
+						bodyBlocks.add(block);
+					}
+				}
+			}
+			//閉じてるブロックの全てのトレースラインを隠す
+			for (Block parent : bodyBlocks) {
+				RenderableBlock rBlock;
+				if (parent.getGenusName().equals("procedure")) {
+					rBlock = RenderableBlock.getRenderableBlock(parent
+							.getAfterBlockID());
+				} else {
+					rBlock = RenderableBlock.getRenderableBlock(parent
+							.getSocketAt(0).getBlockID());
+				}
+				if (rBlock != null) {
+					hideTraceLines(rBlock);
+				}
+			}
+		}
+	}
+
+	public void hideTraceLines(RenderableBlock rBlock) {
+		while (rBlock != null
+				&& DrawingArrowManager.hasNoAfterBlock(rBlock.getBlock())) {
+			hideTraceLine(rBlock);
+			rBlock = RenderableBlock.getRenderableBlock(rBlock.getBlock()
+					.getAfterBlockID());
+		}
+
+		hideTraceLine(rBlock);
+	}
+
+	public void hideTraceLine(RenderableBlock rBlock) {
+		if (rBlock != null) {
+			if (rBlock.hasArrows()) {
+				rBlock.visibleArrows(false);
+			}
+			Iterable<BlockConnector> sockets = rBlock.getBlock().getSockets();
+			if (sockets != null) {
+				Iterator<BlockConnector> socketConnectors = sockets.iterator();
+				while (socketConnectors.hasNext()) {
+					BlockConnector socket = socketConnectors.next();
+					hideTraceLines(RenderableBlock.getRenderableBlock(socket
+							.getBlockID()));
+				}
+			}
+		}
+	}
+
+	public void addTraceLine(RenderableBlock callerBlock) {
+		if (DrawingArrowManager.isActive()) {
+			BlockCanvas canvas = workspace.getBlockCanvas();
+			JComponent component = callerBlock.getParentWidget()
+					.getJComponent();
+			//メソッド定義ブロックと，呼び出しブロックを直線で結ぶ
+			BlockStub stub = (BlockStub) (callerBlock.getBlock());
+			RenderableBlock parentBlock = RenderableBlock
+					.getRenderableBlock(stub.getParent().getBlockID());
+			if (parentBlock != null) {
+				//呼び出しブロックの座標
+				Point p1 = DrawingArrowManager
+						.calcCallerBlockPoint(callerBlock);
+				//呼び出し関数の定義ファイル
+				Point p2 = DrawingArrowManager
+						.calcDefinisionBlockPoint(parentBlock);
+				ArrowObject arrow = new MultiJointArrowObject(p1, p2);
+				Page parentPage = (Page) callerBlock.getParentWidget();
+				parentPage.addArrow(arrow);
+
+				//定義ブロックへの矢印の追加
+				parentBlock.addStartArrow(arrow);
+				DrawingArrowManager.addPossesser(parentBlock);
+				//callerブロックへの矢印の追加
+				callerBlock.addEndArrow(arrow);
+				DrawingArrowManager.addPossesser(callerBlock);
+
+				callerBlock.updateEndArrowPoint();
+				//managerにブロック登録
+				String pageName = calcClassName();
+
+			}
+		}
+
+	}
+
 	public String calcClassName() {
 		String className = this.selectedJavaFile.substring(0,
 				selectedJavaFile.indexOf(".xml"));
@@ -816,7 +933,8 @@ public class WorkspaceController {
 		List<String> params = calcParamTypes(stub);
 
 		for (Block block : workspace.getBlocks()) {
-			RenderableBlock rb = RenderableBlock.getRenderableBlock(block.getBlockID());
+			RenderableBlock rb = RenderableBlock.getRenderableBlock(block
+					.getBlockID());
 			if (rb.getGenus().equals("procedure")
 					&& rb.getBlock().getBlockLabel().equals(name)
 					&& checkParameterType(block, params)) {
@@ -1179,6 +1297,7 @@ public class WorkspaceController {
 		this.user = user;
 	}
 
+	@SuppressWarnings("unchecked")
 	public JComboBox<String> getInheritanceListBox(){
 		Container cont = frame.getContentPane();
 		JPanel cmp = (JPanel)cont.getComponent(0);
